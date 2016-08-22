@@ -2,4 +2,6 @@
 <h1>Welcome <%= @user.name %></h1>
 <%= image_tag @user.image %>
 
-<%= select_tag 'model_name[states][]', options_for_select(@friends, @friends_selected) %>
+  <!-- <% @friendship.each do |f| %>
+  <h1><%= f.id %></h1>
+  <% end %> -->

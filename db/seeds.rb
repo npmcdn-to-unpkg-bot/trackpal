@@ -25,6 +25,9 @@ u3.groups << g1
 u4.groups << g1
 
 u1.users << u2
+u2.users << u1
+u2.users << u3
+u2.users << u4
 
 
 

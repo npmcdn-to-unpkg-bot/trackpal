@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find params[:id]
-    @friends = Friendship.where(@user)
+    @friendship = Friendship.where(user_id: params[:id])
 
   end
 
