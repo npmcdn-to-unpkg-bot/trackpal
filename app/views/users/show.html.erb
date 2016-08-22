@@ -1,3 +1,5 @@
-<%= form_tag (user_path, method: "get") do %>
-  Form contents
-<% end %>
+
+<h1>Welcome <%= @user.name %></h1>
+<%= image_tag @user.image %>
+
+<%= select_tag 'model_name[states][]', options_for_select(@friends, @friends_selected) %>

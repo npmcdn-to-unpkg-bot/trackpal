@@ -2,11 +2,80 @@
 var group_users = {};
 var user_coordinates = {};
 var group_details = {};
-//
-// id = 51
-// group_users[id].name
 
-//user.coordinates[userid] = coordinate_update[userid]
+
+var planes = {};
+
+var initMap = function(){
+
+
+    var mymap = L.map('mapid').setView([-33.865143, 151.209900], 14);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoicGhhbmlnYW50aSIsImEiOiJjaXJ4dWJrbWQwMDh3MnpxZWJ5emh2djhrIn0.KF7Dwo7HD8Owe5uryb6eaQ'
+    }).addTo(mymap);
+
+    // var customIcon = L.icon({
+    //     // iconUrl: '/assets/marker-icon-2x.png',
+    //     // shadowUrl: '/assets/marker-shadow.png',
+    //     iconUrl: '/assets/bluedot.png',
+    //     iconSize:     [30, 50], // size of the icon
+    //     // shadowSize:   [10, 10], // size of the shadow
+    //     // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    //     iconAnchor:   [20, 55],
+    //     // shadowAnchor: [10, 10],  // the same for the shadow
+    //     // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    //     popupAnchor:  [-3, -76]
+    //   });
+
+  // construct the correct array structure for leaflet display
+  _.each(user_coordinates, function(val, key){
+    // console.log('val,key', val, key, group_users  );
+    _.each(val, function(position, index){
+      var name = group_users[ position.user_id ].name;
+      planes[ name ] = planes[ name ] || [];
+      planes[ name ].push( [position.latitude, position.longitude] );
+    });
+  });
+  // console.log('planes', planes);
+
+
+  // leaflet display iteration
+  _.each(planes, function(v,k){
+    var lastPosition = _.last(v);
+
+  //  console.log('v', v);
+   var drawpolyline = new L.Polyline(v, {
+      color: 'maroon',
+      weight: 3,
+      opacity: 0.5,
+      smoothFactor: 1
+
+    });
+    drawpolyline.addTo(mymap);
+
+    marker = new L.userMarker(lastPosition, {pulsing:true, accuracy:100, smallIcon:true})
+    				.bindPopup(k)
+    				.addTo(mymap);
+            // {icon: customIcon}
+    // marker.setAccuracy(400); // 400 meters accuracy
+  }); //each
+
+  // This is the piece of code to display the destination displayed on to the page. The destination coordinates are based on the meetings point from the users page.
+
+  var circle = L.circle([group_details.latitude, group_details.longitude], 1000, {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.7
+  }).addTo(mymap);
+
+
+  setInterval(getLocation, 1000*20);
+
+};
 
 $(document).ready(function(){
 
@@ -14,31 +83,16 @@ $(document).ready(function(){
     url: '/get_group_details',
     type: 'GET',
     dataType: 'json',
-    data: {group_id:13}
+    data: {group_id:group_id}
 
     }).done(function(data){
       // console.log('success', data);
       group_users = data.users;
       user_coordinates = data.coordinates;
       group_details = data.group;
+      console.log('user_coordinates',user_coordinates);
 
-
-      // var p = {};
-      // _.each(user_coordinates, function(v, k){
-      //   console.log(v,k,group_users[ k ].name  );
-      //
-      //   p[ group_users[ k ].name ]  = p[ group_users[ k ].name ] || [];
-      //
-      //   console.log(p);
-      //   _.each(v.coordinates, function(position, index){
-      //
-      //     p[ group_users[k].name ].push( [position.latitude, position.longitude]  );
-      //
-      //   });
-      // });
-      //
-      // console.log('final', p);
-
+      initMap();
     })
     .fail(function(data){
       console.log('fail', data);
@@ -47,38 +101,9 @@ $(document).ready(function(){
 
 
 
-  var customIcon = L.icon({
-      iconUrl: '/assets/marker-icon-2x.png',
-      shadowUrl: '/assets/marker-shadow.png',
-
-      iconSize:     [30, 50], // size of the icon
-      shadowSize:   [10, 10], // size of the shadow
-      iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-      shadowAnchor: [4, 62],  // the same for the shadow
-      popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-    });
-
-
 //This below the leaflet API code which renders the maps of the location to set view based on the latitude and longitude
 
-var mymap = L.map('mapid').setView([-33.865143, 151.209900], 14);
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox.streets',
-    accessToken: 'pk.eyJ1IjoicGhhbmlnYW50aSIsImEiOiJjaXJ4dWJrbWQwMDh3MnpxZWJ5emh2djhrIn0.KF7Dwo7HD8Owe5uryb6eaQ'
-}).addTo(mymap);
-
-//This is the piece of code to display the destination displayed on to the page. The destination coordinates are based on the meetings point from the users page.
-
-var circle = L.circle([group_details.latitude, group_details.longitude], 1000, {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5
-}).addTo(mymap);
-
-//This is from HTML 5 doctor to read the location from the browser and throws error if the browser does not support the geolocation
 
 
 function displayError(error) {
@@ -104,51 +129,10 @@ function displayError(error) {
 //
 // });
 
-var planes = {
-  "Phani": [[-33.8296,151.1258],[-33.8060,151.2948]],
-  "Ameya": [[-33.8060,151.2948],[-33.8083,150.9821],[-33.81444,150.99696],[-33.86663, 151.02443]],
-  "Satya": [[-33.865895,151.206400], [-33.866180,151.206722], [-33.866269, 151.206465], [-33.866305, 151.212258], [-33.866928, 151.212087]],
-  "Sam": [[-33.866430,151.214447], [-33.866554,151.214919], [-33.866323, 151.214211], [-33.866251, 151.208053], [-33.866982, 151.207860]]
-};
-
-// This function below is for displaying the list of people and their markers based on the last positions
-var names = [];
-_.each(group_users, function(v, k){
-names.push(v.name);
-});
-
-var coordinates = _.toArray(user_coordinates);
-
-
-// var planes = _.object(names, coordinates[]);
-// console.log(planes);
-
-
-
-
-_.each(planes, function(v,k){
-  var lastPosition = _.last(v);
-  //
-  // // var lastPosition = _.toArray(lastPos);
-  // var randomColor = Math.floor(Math.random() * 256);
-  // console.log(randomColor);
-  //
-  // console.log(v);
-  var firstpolyline = new L.Polyline(v, {
-    color: 'maroon',
-    weight: 3,
-    opacity: 0.5,
-    smoothFactor: 1
-
-  });
-  firstpolyline.addTo(mymap);
-
-  marker = new L.marker(lastPosition, {icon: customIcon})
-  				.bindPopup(k)
-  				.addTo(mymap);
-}); //each
-
 }); // document ready
+
+
+//This is from HTML 5 doctor to read the location from the browser and throws error if the browser does not support the geolocation
 
 function getLocation(){
   console.log('getLocation');
@@ -161,7 +145,7 @@ function getLocation(){
   }
 }
 
-//This is the function to get the current position of the user
+//This is the function to get the current position of the user and sends it to the database via ajax request
 function showPosition(position) {
 
   console.log('showPosition');
@@ -169,7 +153,7 @@ function showPosition(position) {
         url: '/submit_position',
         type: 'GET',
         // dataType: 'json',
-        data: { lat: position.coords.latitude, lng: position.coords.longitude },
+        data: { lat: position.coords.latitude, lng: position.coords.longitude, group_id: group_id },
         contentType: 'application/json'})
         .done(function(data){
           console.log('success', data);

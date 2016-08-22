@@ -1,11 +1,16 @@
 class GroupsController < ApplicationController
+  # before_action :authorize_user, :only => [:index]
 
   def show
-
-
+    @current_group = Group.find( params[:id] )
+    # redirect_to root_path if Time.now > @current_group.datetime
   end
 
   def submit_position
+    # binding.pry
+    @newpos = Position.create( latitude: params[:lat], longitude: params[:lng], user_id: @current_user.id, group_id: params[:group_id])
+    @newpos.save
+    
     render :json => {status: 'ok'}, status: :ok
   end
 
@@ -24,11 +29,10 @@ class GroupsController < ApplicationController
     # return a hash of users in group, with user id as the hash key
 
     group = Group.find( group_id );
-
     group_users = group.users.select("name, id, email, image").index_by(&:id)
     # TODO: ^ check returns actual users
 
-    positions = Position.where( group_id: group_id ).group_by( &:user_id )
+    positions = Position.where( group_id: group_id ).select(:latitude, :longitude, :user_id).group_by( &:user_id )
 
     # # above line is equivalent to:
     # coords = {}
@@ -38,6 +42,10 @@ class GroupsController < ApplicationController
     # end
     # p coords
 
+
+
+
+    # render :json => positions, :include => {:user => {:only => :name}}
     render :json => {group: group, users: group_users, coordinates: positions}, status: :ok
   end
 

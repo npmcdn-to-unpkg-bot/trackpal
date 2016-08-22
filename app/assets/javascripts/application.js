@@ -15,8 +15,10 @@
 //= require underscore
 //= require turbolinks
 //= require leaflet
+//= require leaflet.usermarker
 //= require AnimatedMarker
 //= require Control.Coordinates
+
 //= require NumberFormatter
 //= require bootstrap-sprockets
 //= require main

@@ -17,12 +17,17 @@ u4 = User.create(:name => "Sam", :password => "chicken", :password_confirmation 
 # t.datetime "datetime"
 
 Group.destroy_all
-g1 = Group.create(:name => 'Myfriends', :latitude => '-33.881400', :longitude => '151.203289')
+g1 = Group.create(:name => 'Myfriends', :latitude => '-33.88614', :longitude => '151.21024')
 
 u1.groups << g1
 u2.groups << g1
 u3.groups << g1
 u4.groups << g1
+
+u1.users << u2
+
+
+
 
 
 
@@ -33,24 +38,38 @@ u4.groups << g1
   # t.datetime "updated_at", null: false
 
 Position.destroy_all
-p1 = Position.create(:latitude => '-33.8296', :longitude => '151.1258')
-p2 = Position.create(:latitude => '-33.8060', :longitude => '151.2948')
-p3 = Position.create(:latitude => '-33.81444', :longitude => '150.99696')
-p4 = Position.create(:latitude => '-33.86663', :longitude => '151.02443')
-p5 = Position.create(:latitude => '-33.8296', :longitude => '151.1258')
-p6 = Position.create(:latitude => '-33.8060', :longitude => '151.2948')
-p7 = Position.create(:latitude => '-33.81444', :longitude => '150.99696')
-p8 = Position.create(:latitude => '-33.86663', :longitude => '151.02443')
-
+p1 = Position.create(:latitude => '-33.86975', :longitude => '151.20226')
+p2 = Position.create(:latitude => '-33.87395', :longitude => '151.25994')
+p3 = Position.create(:latitude => '-33.91805', :longitude => '151.25925')
+p4 = Position.create(:latitude => '-33.96426', :longitude => '151.14913')
+p5 = Position.create(:latitude => '-33.87737', :longitude => '151.20243')
+p6 = Position.create(:latitude => '-33.88621', :longitude => '151.19951')
+p7 = Position.create(:latitude => '-33.87801', :longitude => '151.25315')
+p8 = Position.create(:latitude => '-33.92019', :longitude => '151.24603')
+p9 = Position.create(:latitude => '-33.88272', :longitude => '151.25101')
+p10 = Position.create(:latitude => '-33.89119', :longitude => '151.24183')
+p11 = Position.create(:latitude => '-33.92361', :longitude => '151.23153')
+p12 = Position.create(:latitude => '-33.92959', :longitude => '151.21814')
+p13 = Position.create(:latitude => '-33.95992', :longitude => '151.13497')
+p14 = Position.create(:latitude => '-33.95536', :longitude => '151.12389')
+p15 = Position.create(:latitude => '-33.92980', :longitude => '151.12784')
 
 u1.positions << p1
 u1.positions << p5
 u1.positions << p6
 u2.positions << p2
 u2.positions << p7
+u2.positions << p9
+u2.positions << p10
 u3.positions << p3
 u3.positions << p8
+u3.positions << p11
+u3.positions << p12
 u4.positions << p4
+u4.positions << p13
+u4.positions << p14
+u4.positions << p15
+
 
 g1.positions << p1
 g1.positions << p2
@@ -60,3 +79,10 @@ g1.positions << p5
 g1.positions << p6
 g1.positions << p7
 g1.positions << p8
+g1.positions << p9
+g1.positions << p10
+g1.positions << p11
+g1.positions << p12
+g1.positions << p13
+g1.positions << p14
+g1.positions << p15

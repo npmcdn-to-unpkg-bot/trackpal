@@ -1,1 +1,52 @@
-<h1>Edit page of user.</h1>
+<div class="container">
+<div class = "row col-xs-10 col-xs-offset-1">
+  <h2>Edit Profile</h2>
+
+  <% if @user.errors.any? %>
+    <ol>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ol>
+  <% end %>
+<div>
+<%= form_for(@user, :class => "form-horizontal", :html => {:multipart => true}) do |f| %>
+  <div class="form-group">
+    <%= f.label :name %>
+    <div>
+      <%= f.text_field(:name, :class => "form-control", :autofocus => true, :required => true )%>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :email %>
+    <div>
+    <%= f.text_field(:email, :class => "form-control", :required => true) %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :image %>
+    <div>
+      <%= cl_image_upload_tag(:image, :class => "form-control" )%>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password %>
+    <div>
+      <%= f.password_field(:password, :class => "form-control" )%>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password_confirmation %>
+    <div>
+      <%= f.password_field(:password_confirmation, :class => "form-control" )%>
+    </div>
+  </div>
+
+  <%= f.submit "Save", :class => "btn btn-primary"%>
+<% end %>
+</div>
+</div>
+</div>
