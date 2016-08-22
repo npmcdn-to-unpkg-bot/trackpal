@@ -11,6 +11,12 @@ var initMap = function(){
     var mymap = L.map('mapid');
     mymap.locate({setView: true, maxZoom: 16});
 
+    function onLocationError(e) {
+    alert(e.message);
+    }
+
+    mymap.on('locationerror', onLocationError);
+
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18,
@@ -19,16 +25,13 @@ var initMap = function(){
     }).addTo(mymap);
 
     // var customIcon = L.icon({
-    //     // iconUrl: '/assets/marker-icon-2x.png',
-    //     // shadowUrl: '/assets/marker-shadow.png',
-    //     iconUrl: '/assets/bluedot.png',
+    //     iconUrl: '/assets/marker-icon-2x.png',
+    //     shadowUrl: '/assets/marker-shadow.png',
     //     iconSize:     [30, 50], // size of the icon
-    //     // shadowSize:   [10, 10], // size of the shadow
-    //     // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    //     iconAnchor:   [20, 55],
+    //     shadowSize:   [10, 10], // size of the shadow
+    //     iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
     //     // shadowAnchor: [10, 10],  // the same for the shadow
     //     // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-    //     popupAnchor:  [-3, -76]
     //   });
 
   // construct the correct array structure for leaflet display
@@ -57,7 +60,7 @@ var initMap = function(){
     });
     drawpolyline.addTo(mymap);
 
-    marker = new L.userMarker(lastPosition, {pulsing:true, accuracy:100, smallIcon:true})
+    marker = L.userMarker(lastPosition, {pulsing:true, accuracy:100, smallIcon:false})
     				.bindPopup(k)
     				.addTo(mymap);
             // {icon: customIcon}
@@ -66,14 +69,14 @@ var initMap = function(){
 
   // This is the piece of code to display the destination displayed on to the page. The destination coordinates are based on the meetings point from the users page.
 
-  var circle = L.circle([group_details.latitude, group_details.longitude], 1000, {
+  var meetingPoint = L.circle([group_details.latitude, group_details.longitude], 100, {
       color: 'red',
       fillColor: '#f03',
-      fillOpacity: 0.7
+      fillOpacity: 0.1
   }).addTo(mymap);
 
 
-  setInterval(getLocation, 1000*20);
+  setInterval(getLocation, 1000*10);
 
 };
 
