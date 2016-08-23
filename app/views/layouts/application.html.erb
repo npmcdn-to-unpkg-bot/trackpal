@@ -16,13 +16,9 @@
   <ul class="nav navbar-nav">
   <% if @current_user.present? %>
 
-    <li class="active"><%= link_to 'Home', root_path %></li>
-
-    <!-- <%# if @current_user.admin? %>
-      <%#= link_to "Users", users_path %>
-    <%# end %> -->
+    <li class="active"><%= link_to 'Home', user_path %></li>
     <li><%= link_to "Logout #{ @current_user.email }", logout_path, :method => :delete %></li>
-    <li><%= link_to "Change Profile", edit_user_path %></li>
+    <li><%= link_to "Change Profile", users_edit_path %></li>
   <% else %>
     <li><%= link_to 'Home', root_path %></li>
     <li><%= link_to 'Sign up', new_user_path %></li>

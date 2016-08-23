@@ -32,6 +32,13 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :Phone %>
+    <div>
+      <%= f.text_field(:phone, :class => "form-control", :required => true) %>
+    </div>
+  </div>
+
+  <div class="form-group">
     <%= f.label :password %>
     <div>
       <%= f.password_field(:password, :class => "form-control" )%>

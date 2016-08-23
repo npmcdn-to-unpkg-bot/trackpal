@@ -9,13 +9,15 @@ var planes = {};
 var initMap = function(){
 
     var mymap = L.map('mapid');
-    mymap.locate({setView: true, maxZoom: 16});
+    mymap.locate({setView: true, maxZoom: 16, watch: true});
 
     function onLocationError(e) {
     alert(e.message);
     }
 
     mymap.on('locationerror', onLocationError);
+
+
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -61,7 +63,7 @@ var initMap = function(){
     drawpolyline.addTo(mymap);
 
     marker = L.userMarker(lastPosition, {pulsing:true, accuracy:100, smallIcon:false})
-    				.bindPopup(k)
+    				.bindPopup(k).openPopup()
     				.addTo(mymap);
             // {icon: customIcon}
     // marker.setAccuracy(400); // 400 meters accuracy
@@ -69,10 +71,10 @@ var initMap = function(){
 
   // This is the piece of code to display the destination displayed on to the page. The destination coordinates are based on the meetings point from the users page.
 
-  var meetingPoint = L.circle([group_details.latitude, group_details.longitude], 100, {
+  var meetingPoint = L.circle([group_details.latitude, group_details.longitude], 200, {
       color: 'red',
       fillColor: '#f03',
-      fillOpacity: 0.1
+      fillOpacity: 0.7
   }).addTo(mymap);
 
 
@@ -100,37 +102,6 @@ $(document).ready(function(){
     .fail(function(data){
       console.log('fail', data);
     });
-
-
-
-
-//This below the leaflet API code which renders the maps of the location to set view based on the latitude and longitude
-
-
-
-
-function displayError(error) {
-  var errors = {
-    1: 'Permission denied',
-    2: 'Position unavailable',
-    3: 'Request timeout'
-  };
-  alert("Error: " + errors[error.code]);
-}
-
-//This should be the code which has the object of array locations of the people within the group
-//This should only get the list of people who are in the group
-
-// var userData = [];
-//
-// users.forEach(function(user){
-//   var groupUser = {
-//     name: user.userName;
-//     id: user.id;
-//     coordinates: []
-//   };
-//
-// });
 
 }); // document ready
 
