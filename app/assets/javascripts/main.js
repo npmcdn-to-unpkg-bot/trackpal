@@ -9,7 +9,7 @@ var planes = {};
 var initMap = function(){
 
     var mymap = L.map('mapid');
-    mymap.locate({setView: true, maxZoom: 16, watch: true});
+    mymap.locate({maxZoom: 16, watch: true});
 
     function onLocationError(e) {
     alert(e.message);

@@ -6,14 +6,21 @@
 
 
 <h2>Your Friends</h2>
-<ul>
+<!-- <ul>
   <% for friendship in @friendships %>
   <li>
     <%= h friendship.name %>
     (<%= link_to "remove", friendship, :method => :delete %>)
   </li>
   <% end %>
-</ul>
+</ul> -->
+
+
+
+<!-- select_tag "people", options_from_collection_for_select(@people, "id", "name", "1") -->
+<%= select_tag "friends", options_from_collection_for_select(@friendships, "id", "name", "1"), multiple: true %>
+
+
 
 <%= form_tag("/send_text?number_to_send_to=#{@current_user.phone}", method: :post) do -%>
   <div><%= submit_tag 'Submit' %></div>
