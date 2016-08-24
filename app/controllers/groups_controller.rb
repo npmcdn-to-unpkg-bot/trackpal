@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
 
   def show
     @current_group = Group.find( params[:id] )
-    redirect_to root_path if Time.now > @current_group.datetime
+    # redirect_to root_path if Time.now > @current_group.datetime
   end
 
   def create
@@ -11,6 +11,7 @@ class GroupsController < ApplicationController
     @newgroup = Group.create (group_params)
 #
     friends = params[:friends]
+    friends << @current_user
     friends.each do |friend|
       send_text_message(User.find(friend).phone)
       @newgroup.users << User.find(friend)

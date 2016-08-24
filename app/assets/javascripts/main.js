@@ -9,6 +9,9 @@ var radius = 0;
 
 var user_markers = [];
 
+var user_polylines = [];
+var user_markers = [];
+
 
 //Initializing the map object
 
@@ -16,7 +19,7 @@ var initMap = function(){
   mymap = L.map('mapid');
 
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicGhhbmlnYW50aSIsImEiOiJjaXJ4dWJrbWQwMDh3MnpxZWJ5emh2djhrIn0.KF7Dwo7HD8Owe5uryb6eaQ', {
-        maxZoom: 15
+        maxZoom: 10
       }).addTo(mymap);
 
   // mymap.locate({setView: true, maxZoom: 15});
@@ -95,6 +98,8 @@ var getGroupUsersCoordinates = function(){
 
 var updateLiveMap = function(coordinates){
 
+  clearMap();
+  
   console.log('updateLiveMap()');
 
     // coordinates is an object indexed by user_id, with an array of coordinates as value
@@ -112,6 +117,7 @@ var updateLiveMap = function(coordinates){
       drawpolyline.addLatLng( [coord.latitude, coord.longitude] );
     });
     drawpolyline.addTo(mymap);
+    user_polylines.push( drawpolyline );
 
     var last = [ _.last(coords).latitude, _.last(coords).longitude ];
     var marker = L.userMarker(last, {pulsing:true, accuracy:100, smallIcon:true})
@@ -170,4 +176,19 @@ var onLocationFound = function(position) {
     .fail(function(data){
       console.log('fail', data);
     });
+};
+
+var clearMap = function(m){
+
+  _.each(user_polylines, function(v, k){
+    mymap.removeLayer(v);
+  });
+
+  _.each(user_markers, function(v, k){
+    mymap.removeLayer(v);
+  });
+
+  user_polylines = [];
+  user_markers = [];
+
 };
