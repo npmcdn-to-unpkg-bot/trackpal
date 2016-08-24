@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_user
-    redirect_to root_path unless @current_user.present && @current_user.admin?
+    redirect_to root_path unless @current_user.present? && @current_user.admin?
   end
 
   def check_for_user

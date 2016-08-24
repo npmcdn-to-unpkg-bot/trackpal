@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
 
-  resources :groups, :only => [:show]
+  resources :groups, :only => [:show, :create]
   resources :users, :except => [:edit]
   resources :friendships
 
@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/submit_position' => 'groups#submit_position'
   get '/get_group_details' => 'groups#get_group_details'
   get '/get_group_coordinates' => 'groups#get_group_coordinates'
+
 
   post '/send_text' => 'send_text#send_text_message'
 

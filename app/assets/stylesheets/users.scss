@@ -1,3 +1,22 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.selectlist{
+  margin: 0, auto;
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  border-color: grey;
+  border-radius: 0.5em;
+  margin: 10px;
+}
+
+.creategrp {
+  margin: 5px;
+
+}
+
+.broadcast {
+  margin: 5px;
+}

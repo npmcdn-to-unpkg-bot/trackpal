@@ -17,11 +17,25 @@
 
 
 
-<!-- select_tag "people", options_from_collection_for_select(@people, "id", "name", "1") -->
-<%= select_tag "friends", options_from_collection_for_select(@friendships, "id", "name", "1"), multiple: true %>
 
+<!-- /send_text?number_to_send_to=#{@current_user.phone} -->
 
+<%= form_for Group.new do |f| -%>
+<%= select_tag "friends", options_from_collection_for_select(@friendships, "id", "name", "1"), :class => 'selectlist', multiple: true %>
+<%= f.text_field :name, :placeholder => 'Enter the name of group...' %>
+<%= f.text_field :location, :placeholder => 'Enter the location...' %>
+<%= f.datetime_select :datetime %>
+<%= f.submit 'Broadcast', :class => 'broadcast' %>
 
-<%= form_tag("/send_text?number_to_send_to=#{@current_user.phone}", method: :post) do -%>
-  <div><%= submit_tag 'Submit' %></div>
 <% end -%>
+
+
+<!-- <%#= form_tag("/groups", method: :post) do -%>
+<%#= select_tag "friends", options_from_collection_for_select(@friendships, "id", "name", "1"), :class => 'selectlist', multiple: true %>
+
+<%#= text_field 'group[name]', nil, placeholder: 'Enter the name of group..' %>
+<%#= text_field 'group[location]', nil, placeholder: 'Enter the location..' %>
+<%#= select_datetime %>
+<%#= submit_tag 'Broadcast', :class => 'broadcast' %>
+
+<%# end -%> -->
