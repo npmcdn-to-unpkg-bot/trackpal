@@ -18,7 +18,7 @@ var target_location;
 var initMap = function(){
   mymap = L.map('mapid');
 
-  L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicGhhbmlnYW50aSIsImEiOiJjaXJ4dWJrbWQwMDh3MnpxZWJ5emh2djhrIn0.KF7Dwo7HD8Owe5uryb6eaQ', {
+  L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=sk.eyJ1IjoicGhhbmlnYW50aSIsImEiOiJjaXM5dzVnaWgwMDZnMnpvZm44bmppMnRqIn0.M1RM0YiNM2yK0yDplflk_w', {
         maxZoom: 15
       }).addTo(mymap);
 
