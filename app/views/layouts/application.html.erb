@@ -4,6 +4,7 @@
   <title>Trackpal</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
+  <%= javascript_include_tag 'application' %>
   <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
@@ -28,8 +29,5 @@
 
 <%= yield %>
 
-<%= javascript_include_tag 'leaflet' %>
-<%= javascript_include_tag 'leaflet.usermarker' %>
-<%= javascript_include_tag 'application' %>
 </body>
 </html>

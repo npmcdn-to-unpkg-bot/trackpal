@@ -81,5 +81,3 @@ test:
 production:
   <<: *default
   database: trackpal_production
-  username: trackpal
-  password: <%= ENV['TRACKPAL_DATABASE_PASSWORD'] %>
