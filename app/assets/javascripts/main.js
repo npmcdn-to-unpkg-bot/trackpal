@@ -18,7 +18,7 @@ var target_location;
 var initMap = function(){
   mymap = L.map('mapid');
 
-  L.tileLayer('https://api.mapbox.com/styles/v1/phaniganti/cis7cl8g20019gkm62ikl3hc7/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicGhhbmlnYW50aSIsImEiOiJjaXJ4dWJrbWQwMDh3MnpxZWJ5emh2djhrIn0.KF7Dwo7HD8Owe5uryb6eaQ', {
+  L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 15
       }).addTo(mymap);
 
