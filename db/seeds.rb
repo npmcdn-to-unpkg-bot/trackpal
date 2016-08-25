@@ -17,7 +17,7 @@ u4 = User.create(:name => "Sam", :password => "chicken", :password_confirmation 
 # t.datetime "datetime"
 
 Group.destroy_all
-g1 = Group.create(:name => 'Myfriends', :latitude => '-33.88614', :longitude => '151.21024')
+g1 = Group.create(:name => 'Myfriends')
 u1.groups << g1
 u2.groups << g1
 # u3.groups << g1
