@@ -3,7 +3,6 @@ var group_users = {};
 var user_coordinates = {};
 var group_details = {};
 var planes = [];
-// var drawpolyline = L.Polyline;
 var mymap = {};
 var radius = 0;
 
@@ -12,6 +11,7 @@ var user_markers = [];
 var user_polylines = [];
 var user_markers = [];
 
+var target_location;
 
 //Initializing the map object
 
@@ -60,8 +60,11 @@ $(document).ready(function(){
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.7
-            }).addTo(mymap);
+            });
 
+            target_location = meetingPoint;
+            target_location.addTo(mymap);
+            console.log('meeting point', meetingPoint);
         })
         .fail(function(data){
           console.log('fail', data);
@@ -128,12 +131,15 @@ var updateLiveMap = function(coordinates){
   });  // end per-user iteration over coordinates
 // console.log(all_markers, coordinates);
 
+  // add target to bounds!
+
+
+
   // make sure map shows everyone
   if(all_markers.length) {
-    var group = new L.featureGroup( all_markers );
+    var group = new L.featureGroup( all_markers, target_location );
     mymap.fitBounds( group.getBounds() );
   }
-
 };
 
 var getCurrentUserLocation = function(){
@@ -155,10 +161,10 @@ var onLocationFound = function(position) {
     lastLong = _.last(user_polylines[0]._latlngs).lng;
   }
   else {
+    // return;
     lastLat = 0;
     lastLong = 0;
   }
-
 //Check the current coordinates and if they are same as last do not place an ajax request.
 
   if((lastLat !== position.coords.latitude) && (lastLong !== position.coords.longitude))

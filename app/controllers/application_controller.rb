@@ -22,4 +22,7 @@ class ApplicationController < ActionController::Base
     redirect_to new_user_path unless @current_user.present?
   end
 
+  def default_url_options(options={})
+    { :secure => true }
+  end
 end
