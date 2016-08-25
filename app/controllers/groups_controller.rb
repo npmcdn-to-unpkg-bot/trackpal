@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :check_for_user
+  before_action :check_for_user, :except => [:submit_position]
 
   def show
     @current_group = Group.find( params[:id] )
@@ -23,7 +23,8 @@ class GroupsController < ApplicationController
 
   def submit_position
     # binding.pry
-    @newpos = Position.create( latitude: params[:lat], longitude: params[:lng], user_id: @current_user.id, group_id: params[:group_id])
+    user_id = @current_user.try(:id) || params[:user_id]
+    @newpos = Position.create( latitude: params[:lat], longitude: params[:lng], user_id: user_id, group_id: params[:group_id])
     @newpos.save
 
     render :json => {status: 'ok'}, status: :ok

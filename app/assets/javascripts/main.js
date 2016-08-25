@@ -19,11 +19,10 @@ var initMap = function(){
   mymap = L.map('mapid');
 
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicGhhbmlnYW50aSIsImEiOiJjaXJ4dWJrbWQwMDh3MnpxZWJ5emh2djhrIn0.KF7Dwo7HD8Owe5uryb6eaQ', {
-        maxZoom: 10
+        maxZoom: 15
       }).addTo(mymap);
 
   // mymap.locate({setView: true, maxZoom: 15});
-
   // mymap.on('locationfound', onLocationFound);
 
 
@@ -37,16 +36,14 @@ var initMap = function(){
   updateLiveMap(user_coordinates); // initialise map display
 
   setInterval(getGroupUsersCoordinates, 1000*10); // get all user locations from server every 10s
-  setInterval(getCurrentUserLocation, 1000*10); // get all user locations from server every 10s
-
-
+  setInterval(getCurrentUserLocation, 1000*12); // get all user locations from server every 10s
 
 };
 
 $(document).ready(function(){
 
       $.ajax({
-        url: '/get_group_details',
+          url: '/get_group_details',
         type: 'GET',
         dataType: 'json',
         data: {group_id:group_id}
@@ -69,8 +66,6 @@ $(document).ready(function(){
         .fail(function(data){
           console.log('fail', data);
         });
-
-
 });
 
 //Getting the coordinates of the user every 20 seconds
@@ -99,13 +94,15 @@ var getGroupUsersCoordinates = function(){
 var updateLiveMap = function(coordinates){
 
   clearMap();
-  
+
   console.log('updateLiveMap()');
+
+  var all_markers = [];
 
     // coordinates is an object indexed by user_id, with an array of coordinates as value
     // ... so this each is actually iterating over users
   _.each(coordinates, function(coords, user_id){
-    // console.log(user_id, coords)
+    // console.log("Updatelive map main ", user_id, coords);
     var drawpolyline = new L.Polyline([], {
        color: 'blue',
        weight: 5,
@@ -114,6 +111,7 @@ var updateLiveMap = function(coordinates){
      });
 
     _.each(coords,function(coord, index){
+      // console.log("Updatelive inside coords:", coord);
       drawpolyline.addLatLng( [coord.latitude, coord.longitude] );
     });
     drawpolyline.addTo(mymap);
@@ -124,12 +122,17 @@ var updateLiveMap = function(coordinates){
     				.bindPopup( group_users[user_id].name )
     				.addTo(mymap);
 
-    user_markers.push( marker );
+    all_markers.push( marker ); // just for group bounds in this function
+    user_markers.push( marker ); //global
+
   });  // end per-user iteration over coordinates
+// console.log(all_markers, coordinates);
 
   // make sure map shows everyone
-  var group = new L.featureGroup( user_markers );
-  mymap.fitBounds( group.getBounds() );
+  if(all_markers.length) {
+    var group = new L.featureGroup( all_markers );
+    mymap.fitBounds( group.getBounds() );
+  }
 
 };
 
@@ -145,37 +148,44 @@ var getCurrentUserLocation = function(){
 
 var onLocationFound = function(position) {
 
-  console.log('onLocationFound()', position);
-
-  // var radius = e.accuracy / 2;
-  // var lat = e.latlng.lat;
-  // var lng = e.latlng.lng;
-
   //ignore if location has not changed!
 
+  if(user_polylines[0]._latlngs){
+    lastLat = _.last(user_polylines[0]._latlngs).lat;
+    lastLong = _.last(user_polylines[0]._latlngs).lng;
+  }
+  else {
+    lastLat = 0;
+    lastLong = 0;
+  }
 
-  $.ajax({
-    url: '/submit_position',
-    type: 'GET',
-    // dataType: 'json',
-    // data:  {lat: lat, lng: lng, group_id: group_id },
-    data: { lat: position.coords.latitude, lng: position.coords.longitude, group_id: group_id },
-    contentType: 'application/json'})
-    .done(function(data){
-      console.log('success', data);
+//Check the current coordinates and if they are same as last do not place an ajax request.
 
-      // TODO: update the current-position marker and add a polyline point
-      // for the current user (so our position will be more live than the next
-      // AJAX getLocCoordinates call)
+  if((lastLat !== position.coords.latitude) && (lastLong !== position.coords.longitude))
+  {
+    $.ajax({
+      url: '/submit_position',
+      type: 'GET',
+      // dataType: 'json',
+      // data:  {lat: lat, lng: lng, group_id: group_id },
+      data: { lat: position.coords.latitude, lng: position.coords.longitude, group_id: group_id },
+      contentType: 'application/json'})
+      .done(function(data){
+        console.log('success', data);
 
-      // L.userMarker(e.latlng).addTo(mymap)
-      //     .bindPopup("You are within " + radius + " meters from this point").openPopup();
-      //
-      // L.circle(e.latlng, radius).addTo(mymap);
-    })
-    .fail(function(data){
-      console.log('fail', data);
-    });
+        // TODO: update the current-position marker and add a polyline point
+        // for the current user (so our position will be more live than the next
+        // AJAX getLocCoordinates call)
+
+        // L.userMarker(e.latlng).addTo(mymap)
+        //     .bindPopup("You are within " + radius + " meters from this point").openPopup();
+        //
+        // L.circle(e.latlng, radius).addTo(mymap);
+      })
+      .fail(function(data){
+        console.log('fail', data);
+      });
+  }
 };
 
 var clearMap = function(m){

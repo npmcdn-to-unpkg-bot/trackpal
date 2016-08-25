@@ -6,10 +6,10 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 User.destroy_all
-u1 = User.create(:name => "Satya", :password => "chicken", :password_confirmation => 'chicken', :email => "satya.anupindi@gmail.com")
-u2 = User.create(:name => "Phani", :password => "chicken", :password_confirmation => 'chicken', :email => "ganti.phani@gmail.com")
-u3 = User.create(:name => "Ameya", :password => "chicken", :password_confirmation => 'chicken', :email => "ameya@gmail.com")
-u4 = User.create(:name => "Sam", :password => "chicken", :password_confirmation => 'chicken', :email => "sam@gmail.com")
+u1 = User.create(:name => "Satya", :password => "chicken", :password_confirmation => 'chicken', :email => "satya.anupindi@gmail.com", :phone => '+61466271423')
+u2 = User.create(:name => "Phani", :password => "chicken", :password_confirmation => 'chicken', :email => "ganti.phani@gmail.com", :phone => '+61470455125')
+u3 = User.create(:name => "Ameya", :password => "chicken", :password_confirmation => 'chicken', :email => "ameya@gmail.com", :phone => '+61431065828')
+u4 = User.create(:name => "Sam", :password => "chicken", :password_confirmation => 'chicken', :email => "sam@gmail.com", :phone => '+61466271423')
 
 # t.string   "name"
 # t.string   "latitude"
@@ -56,6 +56,7 @@ p17 = Position.create(:latitude => '-32.5874380479525', :longitude => '152.02769
 p18 = Position.create(:latitude => '-32.67071011779145', :longitude => '151.76402222656247')
 p19 = Position.create(:latitude => '-32.70769504425769', :longitude => '151.51133667968747')
 p20 = Position.create(:latitude => '-32.74466464565342', :longitude => '151.42344605468747')
+
 u1.positions << p1
 u1.positions << p2
 u1.positions << p3
@@ -78,23 +79,23 @@ u2.positions << p19
 u2.positions << p20
 
 
-g1.positions << p1
-g1.positions << p2
-g1.positions << p3
-g1.positions << p4
-g1.positions << p5
-g1.positions << p6
-g1.positions << p7
-g1.positions << p8
-g1.positions << p9
-g1.positions << p10
-g1.positions << p11
-g1.positions << p12
-g1.positions << p13
-g1.positions << p14
-g1.positions << p15
-g1.positions << p16
-g1.positions << p17
-g1.positions << p18
-g1.positions << p19
-g1.positions << p20
+# g1.positions << p1
+# g1.positions << p2
+# g1.positions << p3
+# g1.positions << p4
+# g1.positions << p5
+# g1.positions << p6
+# g1.positions << p7
+# g1.positions << p8
+# g1.positions << p9
+# g1.positions << p10
+# g1.positions << p11
+# g1.positions << p12
+# g1.positions << p13
+# g1.positions << p14
+# g1.positions << p15
+# g1.positions << p16
+# g1.positions << p17
+# g1.positions << p18
+# g1.positions << p19
+# g1.positions << p20
