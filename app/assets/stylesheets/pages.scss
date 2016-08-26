@@ -2,6 +2,49 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.homescreenimg {
+  background-image: url(http://wallpaperlayer.com/img/2015/9/vintage-world-map-wallpaper-3656-3875-hd-wallpapers.jpg);
+  background-size: cover;
+  // background-position: 0 center;
+  margin: 0, auto;
+  width: 100%;
+  height: 100%;
+
+}
+
+.homescreenlogo {
+
+}
+
+.logo {
+  border-radius: 50%;
+  width: 60px;
+  height: 50px;
+
+  border-radius: 1em;
+
+}
+
+// .container {
+//   top: 50%;
+//   max-width: 800px;
+//   margin: auto;
+//   background-color: rgba(250,250,250,0.3);
+//   padding: 1em;
+//   border-radius: 1em;
+// }
+
 #submit{
 margin-top: 20px;
+}
+
+.heading {
+  margin: auto;
+  left: 35%
+}
+
+#logo {
+  text-align: center;
+  color: maroon;
+
 }

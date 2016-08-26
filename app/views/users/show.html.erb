@@ -1,11 +1,11 @@
 
 <h1>Welcome <%= @user.name %></h1>
-<%= image_tag @user.image %>
+<%= image_tag @user.image, :class => "profileImg" %>
 
 <p><%= link_to "Find Friends", users_friends_path %></p>
 
 
-<h2>Your Friends</h2>
+<h3>Your Friends</h3>
 <!-- <ul>
   <% for friendship in @friendships %>
   <li>

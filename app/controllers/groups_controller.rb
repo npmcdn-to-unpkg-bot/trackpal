@@ -26,13 +26,38 @@ class GroupsController < ApplicationController
     user_id = @current_user.try(:id) || params[:user_id]
     @newpos = Position.create( latitude: params[:lat], longitude: params[:lng], user_id: user_id, group_id: params[:group_id])
     @newpos.save
+    group = Group.find( params[:group_id] )
+    username = User.find(user_id).name
 
-    render :json => {status: 'ok'}, status: :ok
+    point1 = [params[:lat],params[:lng]]
+    point2 = [group.latitude, group.longitude]
+
+    # render :json => {status: 'ok'}, status: :ok
+
+  # nearby will return rows if this user has already reached the
+  # notification distance and sent notifiications
+  nearby = Position.where(user_id: user_id)
+                   .where(group_id: params[:group_id])
+                   .where(status: "nearby")
+
+    dist = get_DistanceFromLatLon_InKm(point1, point2)
+
+  sent = false
+
+  if nearby.empty? && dist < 1
+    @newpos.update( :status => "nearby")
+    group.users.each do |user|
+      send_text_distance(user.phone, username )
+    end
+    sent = true
+  end
+
+   render :json => {status: 'ok', dist: dist, near: nearby, sent: sent}, status: :ok
+
+
   end
 
   def get_group_coordinates
-
-    # TODO: check user is in this group first!
 
     positions = Position.where( group_id: params['group_id'] )
                         .order('created_at')
@@ -59,27 +84,12 @@ class GroupsController < ApplicationController
                         .select(:latitude, :longitude, :user_id)
                         .group_by( &:user_id )
 
-    # # above line is equivalent to:
-    # coords = {}
-    # positions.each do |key, pos|
-    #   coords[pos.user_id] ||= []
-    #   coords[pos.user_id] << [pos.latitude, pos.longitude]
-    # end
-    # p coords
-    # render :json => positions, :include => {:user => {:only => :name}}
     render :json => {group: group, users: group_users, coordinates: positions}, status: :ok
   end
-# Broadcast button should send these:
-# params[:user_ids] = 14, 15, 25
-# to
-# POST /groups 'posts#create'
 
-# @group = Group.create
-# @group.user_ids = params[:user_id]
-
-# Then: Create an array of all the group members phone numbers
-# Finally: Message each of the users
-
+def get_DistanceFromLatLon_InKm(point1,point2)
+  distance = Geocoder::Calculations.distance_between(point1, point2)
+ end
 
 def send_text_message(phone)
   # number_to_send_to = params[:number_to_send_to]
@@ -93,6 +103,21 @@ def send_text_message(phone)
     :from => "+#{twilio_phone_number}",
     :to => phone,
     :body => "Join this group at #{ group_url(@newgroup) }."
+  )
+end
+
+def send_text_distance(phone, username)
+  # number_to_send_to = params[:number_to_send_to]
+  twilio_sid = "AC3a80958af3a028cfc67db78aaba8461b"
+  twilio_token = "29e47689c9ebf2f63f187bbad91d99b2"
+  twilio_phone_number = "61437081575"
+
+  @twilio_client = Twilio::REST::Client.new twilio_sid, twilio_token
+
+  @twilio_client.account.sms.messages.create(
+    :from => "+#{twilio_phone_number}",
+    :to => phone,
+    :body => "#{username} is 1 mile away from destination"
   )
 end
 
